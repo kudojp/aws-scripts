@@ -2,8 +2,16 @@
 
 import sys
 import boto3
+import argparse
 
-my_session = boto3.Session(profile_name='ad:dev-backend')
+parser = argparse.ArgumentParser(
+	prog="Default security groups detecter",
+	description="This lists the resources which uses 'default' security groups",
+)
+parser.add_argument('-p', '--profile', required=True)
+args = parser.parse_args()
+
+my_session = boto3.Session(profile_name=args.profile)
 sts_client = my_session.client('sts') # Clientオブジェクト生成
 account_id = sts_client.get_caller_identity()['Account']
 
